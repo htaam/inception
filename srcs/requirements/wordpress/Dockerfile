@@ -21,9 +21,6 @@ COPY ./tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-COPY ./conf/www.conf /etc/php/*/fpm/pool.d/www.conf
-COPY ./conf/wp-config.php /var/www/wordpress/wp-config.php
-
 RUN rm /var/www/wordpress/wp-config-sample.php
 
 RUN mkdir /run/php/ \

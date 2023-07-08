@@ -23,6 +23,7 @@ env:
 up: 
 	@sudo docker compose -f $(COMPOSE) up -d --build
 
+
 down:
 	@if [ -f srcs/.env ]; then\
 		sudo docker compose -f ./srcs/docker-compose.yml down;\
@@ -31,11 +32,11 @@ down:
 clean: down
 	@sudo docker system prune -fa
 	@sudo rm -rf /home/$(USER)/data/*
-	@if [ -s test ]; then sudo docker volume rm $$(sudo docker volume ls -q);fi;
+	@sudo docker volume rm $$(sudo docker volume ls -q);
 	@sudo rm -rf test
 
 fclean: clean
-	@sudo rm -fm srcs/.env
+	@sudo rm -rf srcs/.env
 
 re:fclean all
 
