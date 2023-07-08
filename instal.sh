@@ -1,3 +1,5 @@
+
+
 #removes old versions
 
 sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
@@ -32,7 +34,15 @@ sudo docker run hello-world
 #install compose
 
 sudo apt-get update
-  $ sudo apt-get install docker-compose-plugin
+sudo apt-get install docker-compose-plugin
 
 #test its working
 docker compose version
+
+#add non root permissions
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+#restart the VM
+
+
