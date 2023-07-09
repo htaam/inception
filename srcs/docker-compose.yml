@@ -8,7 +8,7 @@ volumes:
         mariadb:
               driver: local
               driver_opts:
-                device: /home/tmatias/data/mysql
+                device: /home/tmatias/data/mariadb
                 o: bind
                 type: none
 

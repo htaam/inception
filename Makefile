@@ -18,7 +18,8 @@ env:
 		fi;\
 
 		@mkdir -p /home/$(USER)/data/wordpress/
-		@mkdir -p /home/$(USER)/data/mysql/
+		@mkdir -p /home/$(USER)/data/mariadb/
+		
 
 up: 
 	@sudo docker compose -f $(COMPOSE) up -d --build

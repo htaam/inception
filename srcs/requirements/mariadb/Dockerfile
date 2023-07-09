@@ -8,6 +8,8 @@ RUN rm -rf /var/lib/apt/lists/* \
 
 RUN mkdir -p /var/lib/mysql
 
+COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d
+
 COPY ./tools/script.sh /usr/local/bin/script.sh
 
 RUN chmod +x /usr/local/bin/script.sh
