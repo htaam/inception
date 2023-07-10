@@ -1,28 +1,35 @@
 #!/bin/bash
 
-# initialize the MySQL data directory and create the system tables if they don't exist yet
-if [ ! -d "/var/lib/mysql/mysql" ]; then
-    mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+# Start the MariaDB service
+mysqld_safe --datadir=/var/lib/mysql &
+
+# Wait for MariaDB to start
+echo a
+sleep 5
+echo b
+# Check if the mysql.user table exists
+if ! mysql --user=root -e "SELECT 1 FROM mysql.user LIMIT 1" >/dev/null 2>&1; then
+    # Run mysql_upgrade instead of mysql_install_db
+    mysql_upgrade
+
+    # Start the service again
+    mysqladmin -uroot shutdown
+    mysqld_safe --datadir=/var/lib/mysql &
+    
+    # Wait for MariaDB to start
+    sleep 5
 fi
-
-# start the service, run the mysql_secure_installation equivalent and set up database and privileged user
-if [ ! -d "/var/lib/mysql/$db_name" ]; then
-    service mariadb start
-
-    chown -R mysql:mysql /var/lib/mysql
-
-    mysql --user=root --password=$db_root_pwd << EOF
-CREATE DATABASE IF NOT EXISTS $db_name;
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$db_root_pwd';
-GRANT ALL PRIVILEGES ON $db_name.* TO '$db_user'@'%' IDENTIFIED BY '$db_pwd' WITH GRANT OPTION;
+echo c
+# Set root password and perform other necessary configurations
+mysql --user=root << EOF
+DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+ALTER USER 'root'@'localhost' IDENTIFIED BY '$db_root_pwd';
 FLUSH PRIVILEGES;
 EOF
 
-mysqladmin -p$db_root_pwd shutdown
+# Stop the MariaDB service
+mysqladmin -uroot -p$db_root_pwd shutdown
 
-    # Stop the service to allow running mysqld in Dockerfile CMD
-    service mariadb stop
-fi
-
+# Execute the provided command or start the default command
 exec "$@"
-
