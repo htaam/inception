@@ -1,8 +1,17 @@
 events{}
 http{
+
 server {
+
+	server {
+    	listen 80;
+    	server_name tmatias.42.fr;
+    	return 403;
+	}
+
+
     listen 443 ssl;
-    server_name falmeida.42.fr;
+    server_name tmatias.42.fr;
 
     ssl_certificate /etc/ssl/certs/nginx.crt;
     ssl_certificate_key /etc/ssl/private/nginx.key;

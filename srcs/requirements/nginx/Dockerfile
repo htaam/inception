@@ -11,7 +11,7 @@ RUN chmod +x /usr/local/bin/script.sh
 
 RUN mkdir -p /etc/nginx/ssl
 RUN openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
-    -subj "/C=PT/ST=Lisbon/O=42Lisboa/OU=student/CN=falmeida.42.fr" \
+    -subj "/C=PT/ST=Lisbon/O=42Lisboa/OU=student/CN=tmatias.42.fr" \
     -keyout /etc/nginx/ssl/nginx.key \
     -out /etc/nginx/ssl/nginx.crt
 
