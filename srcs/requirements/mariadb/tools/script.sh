@@ -28,6 +28,15 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY '$db_root_pwd';
 FLUSH PRIVILEGES;
 EOF
 
+chown -R mysql:mysql /var/lib/mysql
+
+mysql --user=root --password=$db_root_pwd << EOF
+CREATE DATABASE IF NOT EXISTS $db_name;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$db_root_pwd';
+GRANT ALL PRIVILEGES ON $db_name.* TO '$db_user'@'%' IDENTIFIED BY '$db_pwd' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+EOF
+
 # Stop the MariaDB service
 mysqladmin -uroot -p$db_root_pwd shutdown
 

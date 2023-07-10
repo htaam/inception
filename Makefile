@@ -7,6 +7,9 @@ inception:all
 
 all: env up
 
+build: env
+	@sudo docker compose -f $(COMPOSE) up -d --build
+
 env:
 		@if [ ! -f srcs/.env ] ; then read -p "Env file path: " ENV_FILE;\
 			if [ -a $$ENV_FILE ]; then\
