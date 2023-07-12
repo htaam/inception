@@ -1,7 +1,7 @@
 events{}
 http{
 
-server {
+
 
 	server {
     	listen 80;
@@ -9,7 +9,7 @@ server {
     	return 403;
 	}
 
-
+server {
     listen 443 ssl;
     server_name tmatias.42.fr;
 

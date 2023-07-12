@@ -5,11 +5,10 @@ USER = tmatias
 
 inception:all
 
-all: env up
+all: build
 
-build: env
-	@sudo docker compose -f $(COMPOSE) up -d --build
-
+build: env up
+	
 env:
 		@if [ ! -f srcs/.env ] ; then read -p "Env file path: " ENV_FILE;\
 			if [ -a $$ENV_FILE ]; then\

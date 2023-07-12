@@ -68,6 +68,8 @@ if !(wp user list --field=user_login --allow-root | grep $WP_USR); then
 
 fi
 
+wp user set-role $WP_USR administrator --allow-root
+
 wp plugin update --all --allow-root
 
     wp option set comment_moderation 0 --allow-root
@@ -75,12 +77,17 @@ wp plugin update --all --allow-root
     wp option set comment_previously_approved 0 --allow-root
     wp option set close_comments_for_old_posts 0 --allow-root   
     wp option set close_comments_days_old 0 --allow-root
-
 # Sets the correct port to listen to nginx
 sed -ie 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 0.0.0.0:9000/g' \
 /etc/php/7.4/fpm/pool.d/www.conf
 
+wp theme activate twentytwenty --allow-root
+
+
+
 chown -R wpg:wpg /var/www/html/*
+
+
 
 touch /usr/local/bin/.docker-entrypoint-finished
 echo "Created .docker-entrypoint-finished"
