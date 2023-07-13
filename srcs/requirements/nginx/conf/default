@@ -1,47 +1,49 @@
-events{}
-http{
+events {}
 
-
-
-	server {
-    	listen 80;
-    	server_name tmatias.42.fr;
-    	return 403;
-	}
-
-server {
-    listen 443 ssl;
-    server_name tmatias.42.fr;
-
-    ssl_certificate /etc/ssl/certs/nginx.crt;
-    ssl_certificate_key /etc/ssl/private/nginx.key;
-    root /var/www/html/wordpress;
-    include mime.types;
-    index index.php;
-
-    location / {
-        autoindex on;
-        try_files $uri $uri/ =404;
+http {
+    server {
+        listen 80;
+        server_name tmatias.42.fr;
+        return 403;
     }
 
-    location ~ \.php$ {
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    
-        # Mitigate https://httpoxy.org/ vulnerabilities
-        #fastcgi_param HTTP_PROXY "";
+    server {
+        listen 443 ssl;
+        server_name tmatias.42.fr;
 
-        fastcgi_pass wordpress:9000;
-        fastcgi_index index.php;
+        ssl_certificate /etc/ssl/certs/nginx.crt;
+        ssl_certificate_key /etc/ssl/private/nginx.key;
+        root /var/www/html/wordpress;
+        include mime.types;
+        index index.php;
 
-        # include the fastcgi_param setting
-        include fastcgi_params;
+        location / {
+            autoindex on;
+            try_files $uri $uri/ =404;
+        }
 
-        # SCRIPT_FILENAME parameter is used for PHP FPM determining
-        #  the script name. If it is not set in fastcgi_params file,
-        # i.e. /etc/nginx/fastcgi_params or in the parent contexts,
-        # please comment off following line:
-        fastcgi_param  SCRIPT_FILENAME   $document_root$fastcgi_script_name;
-        fastcgi_param PATH_INFO $fastcgi_path_info;
+        location ~ \.php$ {
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            # Mitigate https://httpoxy.org/ vulnerabilities
+            # fastcgi_param HTTP_PROXY "";
+            fastcgi_pass wordpress:9000;
+            fastcgi_index index.php;
+
+            # include the fastcgi_param setting
+            include fastcgi_params;
+
+            # SCRIPT_FILENAME parameter is used for PHP FPM determining
+            # the script name. If it is not set in fastcgi_params file,
+            # i.e. /etc/nginx/fastcgi_params or in the parent contexts,
+            # please comment off following line:
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            fastcgi_param PATH_INFO $fastcgi_path_info;
+
+            # Add the following lines to disable caching
+            add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate";
+            add_header Pragma "no-cache";
+            expires off;
         }
     }
 }
+
